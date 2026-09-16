@@ -1,0 +1,1 @@
+//interprets cards as blackjack values

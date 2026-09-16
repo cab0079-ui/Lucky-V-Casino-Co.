@@ -1,0 +1,1 @@
+//interface for betting no matter where it happens

@@ -1,0 +1,1 @@
+//enum for rank instead of int or strings
