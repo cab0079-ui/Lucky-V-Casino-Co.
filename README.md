@@ -1,4 +1,4 @@
-# Casino Project
+# Lucky V Casino Project
  
 Casino game interface built for CS 321-01 using
 OOP fundamentals project featuring Blackjack, Five Card Draw Poker,
