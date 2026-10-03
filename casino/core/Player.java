@@ -1,0 +1,1 @@
+//name, balance, persists between games

@@ -1,0 +1,1 @@
+//one suit, one rank, no logic
