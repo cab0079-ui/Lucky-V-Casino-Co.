@@ -1,7 +1,7 @@
 //extends game
 package casino.games.roulette;
 
-import lucky_v_casino_Co.roulette.Wheel;
+import casino.roulette.Wheel;
 
 
 public class Roulette {

@@ -3,7 +3,7 @@
 
 package casino.core;
 
-import lucky_v_casino.cards.Card;
+import casino.cards.Card;
 import java.util.List;
 
 public class HumanPlayer extends Player {

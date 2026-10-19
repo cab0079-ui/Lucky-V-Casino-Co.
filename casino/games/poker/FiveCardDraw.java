@@ -1,8 +1,8 @@
 //extends Game, uses casino.cards
 package casino.games.poker;
 
-import lucky_v_casino.cards.Card;
-import lucky_v_casino.cards.Deck;
+import casino.cards.Card;
+import casino.cards.Deck;
 
 import java.util.List;
 import java.util.ArrayList;
