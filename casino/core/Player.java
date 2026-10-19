@@ -2,7 +2,7 @@
 
 package casino.core;
 
-import lucky_v_casino.cards.Card; //match Chase's package line exactly
+import casino.cards.Card;
 import java.util.List;
 
 public abstract class Player {

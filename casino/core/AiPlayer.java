@@ -4,7 +4,7 @@ package casino.core;
 
 import casino.games.poker.HandEvaluator;
 import casino.games.poker.HandRank;
-import lucky_v_casino.Cards.Card;
+import casino.cards.Card;
 import java.util.List;
 
 public class AIPlayer extends Player {
