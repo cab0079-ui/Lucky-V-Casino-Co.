@@ -1,17 +1,35 @@
-//enum for rank instead of int or strings
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package casino.cards;
 
-public enum Rank {
-    TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7), EIGHT(8),
-    NINE(9), TEN(10), JACK(11), QUEEN(12), KING(13), ACE(14);
+/**
+ * @author chase
+ */
 
+public enum Rank {      //treats each Rank as an enum constant
+    Ace(1),
+    King(13),
+    Queen(12),
+    Jack(11),
+    ten(10),
+    nine(9),
+    eight(8),
+    seven(7),
+    six(6),
+    five(5),
+    four(4),
+    three(3),
+    two(2);
+    
     private final int value;
-
+    
     Rank(int value) {
         this.value = value;
     }
-
-    public int getValue() {
+    
+    public int getValue(){
         return value;
     }
 }
