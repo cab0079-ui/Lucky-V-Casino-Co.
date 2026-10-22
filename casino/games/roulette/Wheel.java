@@ -6,12 +6,12 @@ import java.util.List;
 
 //self-contained logic for roulette; wheel spin, number, etc.
 
-//Generate random number when called, then return number with color odd ore even 
+//Generate random number when called, then return number with color odd ore even
 
 public class Wheel {
 
     private final List<Integer> red = List.of(
-        1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36
+            1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36
     ); // otherwise green or black
 
     // Hold the result of a wheel spin
@@ -49,23 +49,23 @@ public class Wheel {
         String color;
         String oddEven;
 
-    switch (randomNumber) {
-       case 0 -> {
-        number = "0";
-        color = "green";
-        oddEven = "zero";
-    }
-       case 37 -> {
-        number = "00";
-        color = "green";
-        oddEven = "zero";
-    }
-       default -> {
-        number = String.valueOf(randomNumber);
-        color = red.contains(randomNumber) ? "red" : "black";
-        oddEven = (randomNumber % 2 == 0) ? "even" : "odd";
-    }
-}
+        switch (randomNumber) {
+            case 0 -> {
+                number = "0";
+                color = "green";
+                oddEven = "zero";
+            }
+            case 37 -> {
+                number = "00";
+                color = "green";
+                oddEven = "zero";
+            }
+            default -> {
+                number = String.valueOf(randomNumber);
+                color = red.contains(randomNumber) ? "red" : "black";
+                oddEven = (randomNumber % 2 == 0) ? "even" : "odd";
+            }
+        }
 
         return new WheelResult(number, color, oddEven);
     }
