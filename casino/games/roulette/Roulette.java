@@ -1,4 +1,10 @@
 //extends game
+
+/**
+ * Runs one round of Roulette
+ *
+ * @author joseph
+ */
 package casino.games.roulette;
 
 import casino.games.roulette.Wheel;

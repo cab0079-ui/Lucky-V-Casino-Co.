@@ -1,5 +1,10 @@
 //self-contained logic for roulette; wheel spin, number, etc.
-
+/**
+ * generate random number 0-37 evaluate the number in regards to color, 
+ * odd/even/zero and return to be measured by whatever calls wheel
+ *
+ * @author joseph
+ */
 package casino.games.roulette.wheel;
 
 import java.util.List;
@@ -43,7 +48,7 @@ public class Wheel {
     // Spin the wheel and return all result qualifications (color/OddEvenZero)
     public WheelResult spin() {
 
-        int randomNumber = (int) (Math.random() * 38);
+        int randomNumber = (int) (Math.random() * 37);
 
         String number;
         String color;
