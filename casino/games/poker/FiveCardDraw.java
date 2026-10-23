@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+/**
+ * Runs one round of five card draw: deal, draw phase, then showdown.
+ * Betting is not implemented yet.
+ *
+ * @author Kaleb
+ */
 public class FiveCardDraw {
 
     private Deck deck;
@@ -18,6 +24,11 @@ public class FiveCardDraw {
     // Used to rank hands when deciding the winner
     private HandEvaluator handEvaluator;
     //  Builds a fresh deck and gives every player an empty hand
+    /**
+     * Creates a game with a freshly shuffled deck and an empty hand for each player.
+     *
+     * @param players the players at the table, in turn order
+     */
     public FiveCardDraw(List<Player> players) {
         this.deck = new Deck();
         this.deck.shuffle();   // Chase's constructor doesn't shuffle; remove if he adds it
@@ -28,7 +39,9 @@ public class FiveCardDraw {
             playerHands.put(player, new ArrayList<>());
         }
     }
-    // Runs one full round: deal, draw phase for each player, then showdown
+    /**
+     * Plays one full round and prints the winner.
+     */
     public void play() {
         // Give all players 5 cards
         dealInitialHands();
@@ -50,8 +63,11 @@ public class FiveCardDraw {
             }
         }
     }
-    // Removes the discarded cards from a player's hand, then deals the same
-    // number of replacements from the deck
+    /**
+     * Lets a player discard cards and draws the same number of replacements.
+     *
+     * @param player the player whose draw phase is being run
+     */
     public void handleDrawPhase(Player player) {
         List<Card> hand = playerHands.get(player);
         List<Card> discards = player.chooseDiscards(hand);
@@ -60,9 +76,12 @@ public class FiveCardDraw {
             hand.add(deck.drawCard());
         }
     }
-    // Compares every hand against the best one found so far.
-    // compareHands > 0 means this hand beat the current best.
-    // Ties in the same HandRank category currently go to whoever was checked first.
+    /**
+     * Finds the player with the strongest hand. Ties go to whoever was
+     * added to the table first.
+     *
+     * @return the winning player
+     */
     public Player determineWinner() {
         Player winner = null;
         List<Card> bestHand = null;
@@ -77,7 +96,12 @@ public class FiveCardDraw {
 
         return winner;
     }
-    // Lets the GUI or tests read a player's current cards
+    /**
+     * Returns a player's current cards.
+     *
+     * @param player the player to look up
+     * @return that player's hand
+     */
     public List<Card> getHand(Player player) {
         return playerHands.get(player);
     }

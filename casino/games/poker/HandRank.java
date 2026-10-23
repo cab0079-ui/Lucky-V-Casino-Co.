@@ -1,8 +1,12 @@
 package casino.games.poker;
 
 
-// Enum for different kinds of hands, they are in order from weakest to strongest for easier
-// comparison
+/**
+ * Poker hand categories, declared from weakest to strongest so that
+ * {@code compareTo} orders them correctly.
+ *
+ * @author Kaleb
+ */
 public enum HandRank {
     HIGH_CARD,
     PAIR,

@@ -12,14 +12,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A computer-controlled opponent using a simple poker strategy.
+ * It is not saved between sessions.
+ *
+ * @author Kaleb
+ */
+
 public class AIPlayer extends Player {
     private final HandEvaluator evaluator = new HandEvaluator();
-
+    /**
+     * Creates an AI player.
+     *
+     * @param name the AI's display name
+     * @param balance the starting balance
+     */
     public AIPlayer(String name, int balance) {
         super(name, balance);
     }
 
-    // Simplest possible poker strategy: fold on nothing, raise on three of a kind or better, otherwise call
+    /**
+     * Folds on a high-card hand, raises on three of a kind or better,
+     * and calls otherwise.
+     *
+     * @param hand the AI's current cards
+     * @return fold, call, or raise
+     */
     @Override
     public Action decideAction(List<Card> hand) {
         HandRank rank = evaluator.handStrength(hand);
@@ -32,8 +50,13 @@ public class AIPlayer extends Player {
         return Action.CALL;
     }
 
-    // Keeps pairs or better, throws away cards whose rank appears only once (max 3)
-    // NOTE: currently does not try to account for flushes and straights
+    /**
+     * Keeps pairs or better and discards cards whose rank appears only once,
+     * up to three. Does not try to draw to flushes or straights.
+     *
+     * @param hand the AI's current cards
+     * @return a new list of the cards to discard
+     */
     @Override
     public List<Card> chooseDiscards(List<Card> hand) {
         // Count how many times each rank appears in the hand

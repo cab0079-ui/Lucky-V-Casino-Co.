@@ -13,8 +13,20 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Ranks five card poker hands.
+ * Categories are found by counting ranks and checking suits. Ties within
+ * the same category are not broken yet.
+ *
+ * @author Kaleb
+ */
 public class HandEvaluator {
-
+    /**
+     * Determines the category of a hand, checking from strongest to weakest.
+     *
+     * @param hand the five cards to evaluate
+     * @return the hand's category
+     */
     public HandRank handStrength(List<Card> hand) {
         // Quick checks of the hand that will be used to check for the condtion below
         Map<Rank, Integer> rankCounts = countRanks(hand);
@@ -84,7 +96,13 @@ public class HandEvaluator {
         }
         return true;
     }
-
+    /**
+     * Checks for five consecutive ranks. Ace counts as 1, so both A-2-3-4-5
+     * and 10-J-Q-K-A are handled explicitly.
+     *
+     * @param hand the five cards to check
+     * @return true if the hand is a straight
+     */
     private boolean checkStraight(List<Card> hand) {
         // Put the hand into a list
         List<Integer> values = new ArrayList<>();
@@ -116,7 +134,13 @@ public class HandEvaluator {
 
         return false;
     }
-
+    /**
+     * Compares two hands by category only.
+     *
+     * @param hand1 the first hand
+     * @param hand2 the second hand
+     * @return negative if hand1 is weaker, positive if stronger, 0 if the categories match
+     */
     public int compareHands(List<Card> hand1, List<Card> hand2) {
         HandRank rank1 = handStrength(hand1);
         HandRank rank2 = handStrength(hand2);

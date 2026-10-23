@@ -1,6 +1,10 @@
 package casino.core;
 
-// What a player can choose to do on their turn
+/**
+ * The choices a player can make on their turn.
+ *
+ * @author Kaleb
+ */
 public enum Action {
     FOLD, CALL, RAISE, HIT, STAND
 }

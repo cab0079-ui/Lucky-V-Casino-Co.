@@ -12,6 +12,12 @@ import java.io.IOException; //exceptions for file operations
 import java.util.List; //for list return type
 import java.util.ArrayList; //list implementation
 
+/**
+ * Stores each profile as a text file named after the player, inside
+ * the saves/ folder.
+ *
+ * @author Kaleb
+ */
 public class FilePlayerRepository implements PlayerRepository {
 
     private static final String SAVE_DIR = "saves/";
