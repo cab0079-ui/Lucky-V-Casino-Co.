@@ -5,14 +5,11 @@ import casino.cards.Card;
 import casino.cards.Deck;
 import casino.core.Player;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
  * Runs one round of five card draw: deal, draw phase, then showdown.
- * Betting is not implemented yet.
+ *
  *
  * @author Kaleb
  */
@@ -23,7 +20,8 @@ public class FiveCardDraw {
     private Map<Player, List<Card>> playerHands;
     // Used to rank hands when deciding the winner
     private HandEvaluator handEvaluator;
-    //  Builds a fresh deck and gives every player an empty hand
+    private int pot;
+    private static final int ANTE = 10;
     /**
      * Creates a game with a freshly shuffled deck and an empty hand for each player.
      *
@@ -44,15 +42,14 @@ public class FiveCardDraw {
      */
     public void play() {
         // Give all players 5 cards
+        collectAntes();
         dealInitialHands();
 
         // Every player gets one draw phase, in the order they were added because of LinkedHashMap
         for (Player player : playerHands.keySet()) {
             handleDrawPhase(player);
         }
-
-        Player winner = determineWinner();
-        System.out.println("Winner: " + winner.getName());
+        payOut(determineWinner());
     }
     //Deals 5 cards to every player. Private since only play() should start a deal.
     private void dealInitialHands() {
@@ -62,6 +59,28 @@ public class FiveCardDraw {
                 hand.add(deck.drawCard());
             }
         }
+    }
+    private void collectAntes() {
+        Iterator<Player> it = playerHands.keySet().iterator();
+        while (it.hasNext()) {
+            Player player = it.next();
+            if (player.getWager().placeBet(ANTE)) {
+                pot += ANTE;
+            } else {
+                it.remove();   // safe: removing through the iterator, not the map
+            }
+        }
+    }
+    private void payOut(Player winner) {
+        if (winner == null) {
+            return;   // nobody could afford the ante
+        }
+        for (Player player : playerHands.keySet()) {
+            player.getWager().lose();   // stake already went into the pot; this clears the bet
+        }
+        winner.getWager().awardPot(pot);
+        System.out.println("Winner: " + winner.getName() + " takes " + pot);
+        pot = 0;
     }
     /**
      * Lets a player discard cards and draws the same number of replacements.
@@ -105,4 +124,5 @@ public class FiveCardDraw {
     public List<Card> getHand(Player player) {
         return playerHands.get(player);
     }
+    public int getPot() { return pot; }
 }

@@ -2,23 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package core;
+package casino.core;
 
 /**
  *
  * @author Chase
- * Acknowledgment: BlackJack class developed with assistance from
+ * Acknowledgment: Wager class developed with assistance from
  * OpenAI ChatGPT (GPT-6) based on the assignment outline and 
  * requirements provided by the student, October 23, 2026.
  * https://chatgpt.com/
  */
 
-public class wager {
+public class Wager {
     private int credits;
     private int currentBet;
     
     //constructor that ensures the start of each bet is some non-negative number
-    public wager(int startingCredits){  
+    public Wager(int startingCredits){
         if (startingCredits < 0){       
             throw new IllegalArgumentException(
                 "Starting Credits Cannot be Negative!");
@@ -71,10 +71,11 @@ public class wager {
             throw new IllegalStateException(
                 "No Active Bet!");
         }
+        currentBet = 0;
     }
     
     //award credits from a shared pot, for poker.
-    public void Pot(int amount){
+    public void awardPot(int amount){
         if (amount < 0){
             throw new IllegalArgumentException(
                 "Award Cannot be Negative!");
@@ -91,7 +92,7 @@ public class wager {
         return currentBet;
     }
     
-    public boolean hasActivebet(){
+    public boolean hasActiveBet(){
         return currentBet > 0;
     }
 }

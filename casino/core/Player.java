@@ -5,13 +5,13 @@ import java.util.List;
 
 /**
  * Base class for anyone who sits at a table, human or AI.
- * Holds a name and a balance, and leaves decision-making to subclasses.
- *
+ * Holds a name and a {@link Wager} that tracks credits and the current bet,
+ * and leaves decision-making to subclasses.
  * @author Kaleb
  */
 public abstract class Player {
     private final String name;
-    private int balance;
+    private final Wager wager;
 
     /**
      * Creates a player.
@@ -21,31 +21,20 @@ public abstract class Player {
      */
     public Player(String name, int balance) {
         this.name = name;
-        this.balance = balance;
+        this.wager = new Wager(balance);
     }
 
     public String getName() { return name; }
-    public int getBalance() { return balance; }
+    public int getBalance() { return wager.getCredits(); }
+    public Wager getWager() { return wager; }
 
-    /**
-     * Removes money from the balance, for example when placing a bet.
-     *
-     * @param amount the amount to remove
-     * @throws IllegalArgumentException if the amount exceeds the balance
-     */
-    public void deductBalance(int amount) {
-        if (amount > balance) {
-            throw new IllegalArgumentException("Insufficient funds");
-        }
-        balance -= amount;
-    }
     /**
      * Adds money to the balance, for example when winning a hand.
      *
      * @param amount the amount to add
      */
     public void addBalance(int amount) {
-        balance += amount;
+        wager.awardPot(amount);
     }
 
     /**
