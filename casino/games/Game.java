@@ -5,9 +5,10 @@
  * @author joseph
  */
 
-package casino.core;
+package casino.games;
 
 import java.util.Scanner;
+import casino.core.HumanPlayer;
 import casino.games.Roulette;
 import casino.games.Poker;
 import casino.games.Blackjack;
@@ -15,28 +16,38 @@ import casino.games.Blackjack;
 public class Game {
     public static void main() {
     Scanner playerChoiceInt = new Scanner(System.in);
-
+        System.out.println("Player: " + player.getName());
+        System.out.println("Balance: $" + player.getBalance());
         System.out.println("\nChoose game to play:");
         System.out.println("1. roulette");
         System.out.println("2. 5-card Poker");
         System.out.println("3. blackjack");
+        System.out.println("4. Return to main menu");
         
         System.out.print("Enter your choice (1-6): ");
         String playerChoice = playerChoiceInt.next();
     //game runs yay
         switch (playerChoice) {
            case "1" -> {
+            System.out.println("\nStarting Game");
             //play roulette
 
         }
            case "2" -> {
+            System.out.println("\nStarting Game");
             //play 5card
         }
            case "3" -> {
+               System.out.println("\nStarting Game");
+                //play blackjack
+        }
+           case "4" -> {
+               System.out.println("\returning to main menu");
                 //play blackjack
         }
            default -> {
-            System.out.println("eneter 1, 2, or 3 - that's what we're working with");
+            System.out.println("eneter 1, 2, or 3. I guess you can do 4 if you want, but notining else");
+            
         }
     }
 }
