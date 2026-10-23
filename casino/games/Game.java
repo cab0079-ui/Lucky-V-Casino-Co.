@@ -9,9 +9,9 @@ package casino.games;
 
 import java.util.Scanner;
 import casino.core.HumanPlayer;
-import casino.games.Roulette;
-import casino.games.Poker;
-import casino.games.Blackjack;
+import casino.games.roulette.Roulette;
+import casino.games.poker.FiveCardDraw;
+import casino.games.blackjack.Blackjack;
 
 // chose a game to run
 public class Game {
@@ -32,19 +32,28 @@ public class Game {
            case "1" -> {
             System.out.println("\nStarting Game");
             //play roulette
+            Roulette roulette = new Roulette();
+            roulette.play(player);
 
         }
            case "2" -> {
             System.out.println("\nStarting Game");
             //play 5card
+            FiveCardDraw fivecarddraw = new FiveCardDraw();
+            fivecarddraw.play(player);
         }
            case "3" -> {
                System.out.println("\nStarting Game");
                 //play blackjack
+                Blackjack blackjack = new Blackjack();
+                blackjack.play(player);
         }
            case "4" -> {
                System.out.println("\nreturning to main menu");
-                //play blackjack
+                //retuirn to main menu
+                input.close();
+                return;
+
         }
            default -> {
             System.out.println("eneter 1, 2, or 3. I guess you can do 4 if you want, but notining else");
