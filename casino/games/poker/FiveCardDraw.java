@@ -31,7 +31,7 @@ public class FiveCardDraw {
      */
     public FiveCardDraw(List<Player> players) {
         this.deck = new Deck();
-        this.deck.shuffle();   // Chase's constructor doesn't shuffle; remove if he adds it
+        this.deck.shuffle();
         this.playerHands = new LinkedHashMap<>();
         this.handEvaluator = new HandEvaluator();
 

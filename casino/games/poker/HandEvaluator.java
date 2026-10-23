@@ -28,7 +28,7 @@ public class HandEvaluator {
      * @return the hand's category
      */
     public HandRank handStrength(List<Card> hand) {
-        // Quick checks of the hand that will be used to check for the condtion below
+        // Quick checks of the hand that will be used to check for the condition below
         Map<Rank, Integer> rankCounts = countRanks(hand);
         boolean isFlush = checkFlush(hand);
         boolean isStraight = checkStraight(hand);
