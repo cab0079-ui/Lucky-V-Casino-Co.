@@ -12,10 +12,11 @@ import casino.core.HumanPlayer;
 import casino.games.Roulette;
 import casino.games.Poker;
 import casino.games.Blackjack;
+
 // chose a game to run
 public class Game {
     public static void main() {
-    Scanner playerChoiceInt = new Scanner(System.in);
+    Scanner input = new Scanner(System.in);
         System.out.println("Player: " + player.getName());
         System.out.println("Balance: $" + player.getBalance());
         System.out.println("\nChoose game to play:");
@@ -25,7 +26,7 @@ public class Game {
         System.out.println("4. Return to main menu");
         
         System.out.print("Enter your choice (1-6): ");
-        String playerChoice = playerChoiceInt.next();
+        String playerChoice = input.nextLine().trim();
     //game runs yay
         switch (playerChoice) {
            case "1" -> {
@@ -42,7 +43,7 @@ public class Game {
                 //play blackjack
         }
            case "4" -> {
-               System.out.println("\returning to main menu");
+               System.out.println("\nreturning to main menu");
                 //play blackjack
         }
            default -> {
