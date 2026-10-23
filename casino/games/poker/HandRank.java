@@ -1,8 +1,8 @@
 package casino.games.poker;
 
 
-//Enum for different kinds of hands, they are in order from weakest to strongest for easier
-//comparison
+// Enum for different kinds of hands, they are in order from weakest to strongest for easier
+// comparison
 public enum HandRank {
     HIGH_CARD,
     PAIR,

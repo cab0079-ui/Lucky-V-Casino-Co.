@@ -17,7 +17,7 @@ public abstract class Player {
     public String getName() { return name; }
     public int getBalance() { return balance; }
 
-    //Rejects an overdraw so balance can never go negative
+    // Rejects an overdraw so balance can never go negative
     public void deductBalance(int amount) {
         if (amount > balance) {
             throw new IllegalArgumentException("Insufficient funds");
@@ -29,6 +29,9 @@ public abstract class Player {
         balance += amount;
     }
 
-    //Each subclass decides differently: the human asks the user, the AI uses logic
+    // Each subclass decides differently: the human asks the user, the AI uses logic
     public abstract Action decideAction(List<Card> hand);
+
+    // Each subclass decides which cards to throw away during the draw phase
+    public abstract List<Card> chooseDiscards(List<Card> hand);
 }

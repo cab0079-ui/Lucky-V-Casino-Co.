@@ -2,6 +2,8 @@
 package casino.persistence;
 
 
+import casino.core.HumanPlayer;
+
 import java.io.File; //for saves/
 import java.io.FileWriter; //for save(), writes text to file
 import java.io.FileReader; //for load(), opens a file for reading
@@ -15,29 +17,24 @@ public class FilePlayerRepository implements PlayerRepository {
     private static final String SAVE_DIR = "saves/";
 
     @Override
-    public void save(String username, int balance) {
+    public void save(HumanPlayer player) {
         File dir = new File(SAVE_DIR);
-        //existence check
         if (!dir.exists()) {
-            dir.mkdirs(); //create the saves/ folder if it doesn't exist yet
+            dir.mkdirs();
         }
-        //creates and opens a file with username.txt and writes the username and balance to it
-        try (FileWriter writer = new FileWriter(SAVE_DIR + username + ".txt")) {
-            writer.write("username=" + username + "\n");
-            writer.write("balance=" + balance + "\n");
+        try (FileWriter writer = new FileWriter(SAVE_DIR + player.getName() + ".txt")) {
+            writer.write("username=" + player.getName() + "\n");
+            writer.write("balance=" + player.getBalance() + "\n");
         }
-        //if something goes wrong, catch it
         catch (IOException e) {
             System.out.println("Failed to save profile: " + e.getMessage());
         }
     }
 
     @Override
-    public int load(String username) {
+    public HumanPlayer load(String username) {
         File file = new File(SAVE_DIR + username + ".txt");
         int balance = 0;
-        //reads a line if it starts with "balance=", it strips that prefix and only reads the number
-        //then saves that int value to balance
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -49,9 +46,9 @@ public class FilePlayerRepository implements PlayerRepository {
             System.out.println("Failed to load profile: " + e.getMessage());
         }
 
-        return balance;
+        return new HumanPlayer(username, balance);
     }
-    //existence check
+    // Existence check
     @Override
     public boolean exists(String username) {
         File file = new File(SAVE_DIR + username + ".txt");
@@ -66,8 +63,8 @@ public class FilePlayerRepository implements PlayerRepository {
         if (!dir.exists()) {
             return profiles; //empty list, no profiles saved yet
         }
-        //Gets all files inside File object, for each file found it strips the .txt
-        //to add the username to the list
+        // Gets all files inside File object, for each file found it strips the .txt
+        // to add the username to the list
         File[] files = dir.listFiles();
         if (files != null) {
             for (File file : files) {
