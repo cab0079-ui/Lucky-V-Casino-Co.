@@ -63,7 +63,7 @@ public class HandEvaluator {
         return HandRank.HIGH_CARD;
     }
     // This method counts the ranks in a hand using Map and HashMap since order doesn't matter.
-    // The key passed is the Card enum, in the hand, and the value is the number of that card in the hand.
+    // The key passed is the Rank enum, in the hand, and the value is the number of that card in the hand.
     private Map<Rank, Integer> countRanks(List<Card> hand) {
         Map<Rank, Integer> counts = new HashMap<>();
         for (Card card : hand) {

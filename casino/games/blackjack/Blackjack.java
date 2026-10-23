@@ -21,7 +21,7 @@ public class Blackjack {            //Basic card game logic for Blackjack
     private Hand aiplayer;          //stores the other AI player's hand of cards
     private Hand player;            //stores the Dealer's hand of cards
     
-    private wager humanWager;       //manages the user's credits and bets
+    private Wager humanWager;       //manages the user's credits and bets
     
     private boolean humanStayed;    //tracks T||F if the user stayed
     private boolean aiStayed;       //tracks T||F if the ai stayed
@@ -39,7 +39,7 @@ public class Blackjack {            //Basic card game logic for Blackjack
         aiplayer = new Hand();      //creates a new hand for the aiplayer
         player = new Hand();        //creates a new hand for the dealer
         
-        humanWager = new wager(startingCredits);       //creates a new bet for the user
+        humanWager = new Wager(startingCredits);       //creates a new bet for the user
         
         humanStayed = false;        //initalizes user status to not having stayed
         aiStayed = false;           //initalizes ai status to not having stayed
@@ -63,7 +63,7 @@ public class Blackjack {            //Basic card game logic for Blackjack
     }
     
     public void dealCards(){                                    //starts a new round
-        if (!humanWager.hasActivebet()){                        //program cannot deal unless there's a bet
+        if (!humanWager.hasActiveBet()){                        //program cannot deal unless there's a bet
             return;
         }
         else if (!gameOver && (!humanplayer.getCards().isEmpty() ||  //if the game hasn't ended & the user has cards
@@ -154,7 +154,7 @@ public class Blackjack {            //Basic card game logic for Blackjack
         return calculateHand(hand) > 21;    //true only when the hand exceeds 21
     }
     
-    public boolean isBlackJack(Hand hand){  //checks for a blackjack
+    public boolean isBlackjack(Hand hand){  //checks for a blackjack
         return hand.getCards().size() == 2  //requires exactly two cards
             && calculateHand(hand) == 21;   //the 2 cards total must be 21
     }
@@ -173,12 +173,12 @@ public class Blackjack {            //Basic card game logic for Blackjack
     }
     
     private void settleBet(){                   //determines where to the send the credits to 
-        if (!humanWager.hasActivebet()){        //can't start if there's already a bet 
+        if (!humanWager.hasActiveBet()){        //can't start if there's already a bet
             return;
         }
         
         int humanTotal = calculateHand(humanplayer);        //calculate user's hand
-        int dealertotal = calculatehand(player);            //calculate dealer's hand
+        int dealerTotal = calculateHand(player);            //calculate dealer's hand
         
         boolean humanBlackjack = isBlackjack(humanplayer);  //checks for blackjack
         boolean dealerBlackjack = isBlackjack(player);

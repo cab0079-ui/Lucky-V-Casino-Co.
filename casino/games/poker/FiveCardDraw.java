@@ -4,13 +4,15 @@ package casino.games.poker;
 import casino.cards.Card;
 import casino.cards.Deck;
 import casino.core.Player;
+import casino.core.Wager;
 
 import java.util.*;
 
 /**
- * Runs one round of five card draw: deal, draw phase, then showdown.
- *
- *
+ * Runs one round of five card draw: ante, deal, draw phase, then showdown.
+ * Every player antes into a shared pot, and the winner takes all of it.
+ * Players who can't afford the ante sit out. Each object plays one round,
+ * so create a new game for each hand.
  * @author Kaleb
  */
 public class FiveCardDraw {
@@ -21,6 +23,7 @@ public class FiveCardDraw {
     // Used to rank hands when deciding the winner
     private HandEvaluator handEvaluator;
     private int pot;
+    /** Fixed amount every player antes into the pot. */
     private static final int ANTE = 10;
     /**
      * Creates a game with a freshly shuffled deck and an empty hand for each player.
@@ -38,11 +41,13 @@ public class FiveCardDraw {
         }
     }
     /**
-     * Plays one full round and prints the winner.
+     * Plays one full round: ante, deal, draw phase, then showdown.
+     * Prints the winner and updates balances through each player's {@link Wager}.
      */
     public void play() {
-        // Give all players 5 cards
+        // Take antes first; players who can't pay sit out
         collectAntes();
+        // Give all players 5 cards
         dealInitialHands();
 
         // Every player gets one draw phase, in the order they were added because of LinkedHashMap
@@ -60,6 +65,10 @@ public class FiveCardDraw {
             }
         }
     }
+    /**
+     * Takes the ante from every player and adds it to the pot.
+     * Anyone who can't afford it is removed from the table.
+     */
     private void collectAntes() {
         Iterator<Player> it = playerHands.keySet().iterator();
         while (it.hasNext()) {
@@ -71,6 +80,12 @@ public class FiveCardDraw {
             }
         }
     }
+    /**
+     * Clears every player's active bet and gives the pot to the winner.
+     * Does nothing if there is no winner.
+     *
+     * @param winner the player who takes the pot, or null if nobody is at the table
+     */
     private void payOut(Player winner) {
         if (winner == null) {
             return;   // nobody could afford the ante
@@ -99,7 +114,7 @@ public class FiveCardDraw {
      * Finds the player with the strongest hand. Ties go to whoever was
      * added to the table first.
      *
-     * @return the winning player
+     * @return the winning player, or null if nobody is at the table
      */
     public Player determineWinner() {
         Player winner = null;
@@ -124,5 +139,10 @@ public class FiveCardDraw {
     public List<Card> getHand(Player player) {
         return playerHands.get(player);
     }
+    /**
+     * Returns the chips currently in the pot.
+     *
+     * @return the pot, which is 0 before antes and after the payout
+     */
     public int getPot() { return pot; }
 }
