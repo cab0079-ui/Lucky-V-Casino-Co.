@@ -3,8 +3,6 @@ package casino.games.poker;
 
 import casino.cards.Card;
 import casino.cards.Deck;
-import casino.core.AIPlayer;
-import casino.core.HumanPlayer;
 import casino.core.Player;
 
 import java.util.*;
@@ -23,8 +21,7 @@ public class FiveCardDraw {
     // Used to rank hands when deciding the winner
     private HandEvaluator handEvaluator;
     private int pot;
-    public static final int ANTE = 10;
-    private static final int AI_BALANCE = 100;
+    private static final int ANTE = 10;
     /**
      * Creates a game with a freshly shuffled deck and an empty hand for each player.
      *
@@ -117,34 +114,6 @@ public class FiveCardDraw {
         }
 
         return winner;
-    }
-    /**
-     * Plays five card draw hands against AI opponents until the player quits
-     * or can no longer afford the ante.
-     *
-     * @param human the logged-in player
-     * @param input the shared Scanner (never closed here)
-     */
-    private static void playPoker(HumanPlayer human, Scanner input) {
-        while (true) {
-            if (human.getBalance() < FiveCardDraw.ANTE) {
-                System.out.println("Not enough credits to ante.");
-                return;
-            }
-
-            List<Player> table = new ArrayList<>();
-            table.add(human);
-            table.add(new AIPlayer("AI 1", AI_BALANCE));
-            table.add(new AIPlayer("AI 2", AI_BALANCE));
-
-            new FiveCardDraw(table).play();
-
-            System.out.println("Balance: $" + human.getBalance());
-            System.out.print("Play another hand? (y/n): ");
-            if (!input.nextLine().trim().equalsIgnoreCase("y")) {
-                return;
-            }
-        }
     }
     /**
      * Returns a player's current cards.

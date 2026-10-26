@@ -18,7 +18,6 @@ import java.util.Map;
  *
  * @author Kaleb
  */
-
 public class AIPlayer extends Player {
     private final HandEvaluator evaluator = new HandEvaluator();
     /**
