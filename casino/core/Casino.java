@@ -141,8 +141,8 @@ public static void main(String[] args) {
         // The selected player is now available for the casino game.
         System.out.println("\n Have a great time in the Lucky V Casino!");
 
-        // Call your game/menu here and pass it the player.
-        // Example: CasinoMenu.start(player);
+        // call game menu
+        
 
         input.close();
     }
