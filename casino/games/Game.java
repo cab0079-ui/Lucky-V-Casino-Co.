@@ -9,6 +9,7 @@ package casino.games;
 
 import java.util.Scanner;
 import casino.core.HumanPlayer;
+import casino.core.player;
 import casino.games.roulette.Roulette;
 import casino.games.poker.FiveCardDraw;
 import casino.games.blackjack.Blackjack;
