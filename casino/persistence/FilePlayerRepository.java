@@ -22,12 +22,15 @@ public class FilePlayerRepository implements PlayerRepository {
 
     private static final String SAVE_DIR = "saves/";
 
+    /** {@inheritDoc} Writes the profile to saves/&lt;name&gt;.txt. */
     @Override
     public void save(HumanPlayer player) {
+        // Make the saves/ folder the first time anything is saved
         File dir = new File(SAVE_DIR);
         if (!dir.exists()) {
             dir.mkdirs();
         }
+        // try-with-resources closes the writer automatically
         try (FileWriter writer = new FileWriter(SAVE_DIR + player.getName() + ".txt")) {
             writer.write("username=" + player.getName() + "\n");
             writer.write("balance=" + player.getBalance() + "\n");
@@ -36,7 +39,11 @@ public class FilePlayerRepository implements PlayerRepository {
             System.out.println("Failed to save profile: " + e.getMessage());
         }
     }
-
+    /**
+     * {@inheritDoc}
+     * If the file is missing or unreadable, the player is returned with a
+     * balance of 0.
+     */
     @Override
     public HumanPlayer load(String username) {
         File file = new File(SAVE_DIR + username + ".txt");
@@ -48,7 +55,7 @@ public class FilePlayerRepository implements PlayerRepository {
                     balance = Integer.parseInt(line.substring("balance=".length()));
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             System.out.println("Failed to load profile: " + e.getMessage());
         }
 

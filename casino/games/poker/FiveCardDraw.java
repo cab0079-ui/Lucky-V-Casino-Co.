@@ -1,27 +1,34 @@
-//extends Game when it exists
 package casino.games.poker;
 
 import casino.cards.Card;
 import casino.cards.Deck;
+import casino.core.AIPlayer;
+import casino.core.HumanPlayer;
 import casino.core.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Runs one round of five card draw: deal, draw phase, then showdown.
- *
+ * The round uses a Wager ante and a pot.
  *
  * @author Kaleb
  */
 public class FiveCardDraw {
 
-    private Deck deck;
+    private final Deck deck;
     // Key is the player, value is the 5 cards they hold
-    private Map<Player, List<Card>> playerHands;
+    private final Map<Player, List<Card>> playerHands;
     // Used to rank hands when deciding the winner
-    private HandEvaluator handEvaluator;
+    private final HandEvaluator handEvaluator;
     private int pot;
-    private static final int ANTE = 10;
+    public static final int ANTE = 10;
+    private static final int AI_BALANCE = 100;
     /**
      * Creates a game with a freshly shuffled deck and an empty hand for each player.
      *
@@ -41,8 +48,9 @@ public class FiveCardDraw {
      * Plays one full round and prints the winner.
      */
     public void play() {
-        // Give all players 5 cards
+
         collectAntes();
+        // Give all players 5 cards
         dealInitialHands();
 
         // Every player gets one draw phase, in the order they were added because of LinkedHashMap
@@ -87,7 +95,7 @@ public class FiveCardDraw {
      *
      * @param player the player whose draw phase is being run
      */
-    public void handleDrawPhase(Player player) {
+    private void handleDrawPhase(Player player) {
         List<Card> hand = playerHands.get(player);
         List<Card> discards = player.chooseDiscards(hand);
         hand.removeAll(discards);
@@ -101,7 +109,7 @@ public class FiveCardDraw {
      *
      * @return the winning player
      */
-    public Player determineWinner() {
+    private Player determineWinner() {
         Player winner = null;
         List<Card> bestHand = null;
 
@@ -114,6 +122,34 @@ public class FiveCardDraw {
         }
 
         return winner;
+    }
+    /**
+     * Plays five card draw hands against AI opponents until the player quits
+     * or can no longer afford the ante.
+     *
+     * @param human the logged-in player
+     * @param input the shared Scanner (never closed here)
+     */
+    public static void playPoker(HumanPlayer human, Scanner input) {
+        while (true) {
+            if (human.getBalance() < FiveCardDraw.ANTE) {
+                System.out.println("Not enough credits to ante.");
+                return;
+            }
+
+            List<Player> table = new ArrayList<>();
+            table.add(human);
+            table.add(new AIPlayer("AI 1", AI_BALANCE));
+            table.add(new AIPlayer("AI 2", AI_BALANCE));
+
+            new FiveCardDraw(table).play();
+
+            System.out.println("Balance: $" + human.getBalance());
+            System.out.print("Play another hand? (y/n): ");
+            if (!input.nextLine().trim().equalsIgnoreCase("y")) {
+                return;
+            }
+        }
     }
     /**
      * Returns a player's current cards.
