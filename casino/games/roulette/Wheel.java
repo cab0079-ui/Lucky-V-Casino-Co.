@@ -1,6 +1,6 @@
 //self-contained logic for roulette; wheel spin, number, etc.
 
-package casino.games.roulette.wheel;
+package casino.games.roulette;
 
 import java.util.List;
 
