@@ -9,6 +9,7 @@ package casino.core;
 import casino.persistence.PlayerRepository;
 import casino.persistence.FilePlayerRepository;
 import casino.core.HumanPlayer;
+import casino.games.Game;
 import java.util.List;
 import java.util.Scanner;
 // chose which save file to load
@@ -141,8 +142,9 @@ public static void main(String[] args) {
         // The selected player is now available for the casino game.
         System.out.println("\n Have a great time in the Lucky V Casino!");
 
-        // call game menu
+        // call game menue
         
+        Game.start(player);
 
         input.close();
     }
