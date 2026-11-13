@@ -8,8 +8,7 @@ package casino.core;
 
 import casino.persistence.PlayerRepository;
 import casino.persistence.FilePlayerRepository;
-import casino.core.HumanPlayer;
-import casino.games.Game;
+
 import java.util.List;
 import java.util.Scanner;
 // chose which save file to load
