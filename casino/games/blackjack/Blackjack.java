@@ -60,6 +60,22 @@ public class Blackjack {            //Basic card game logic for Blackjack
     public int getCredits(){                                    //lets the user know how many credits they have
         return humanWager.getCredits();
     }
+
+    public Hand getHumanPlayer(){              //returns the human player's hand
+        return humanplayer;
+    }
+
+    public Hand getAIPlayer(){                 //returns the AI player's hand
+        return aiplayer;
+    }
+
+    public Hand getDealer(){                   //returns the dealer's hand
+        return player;
+    }
+
+    public boolean isGameOver(){               //checks whether the game has ended
+        return gameOver;
+    }
     
     public int currentBet(){                                    //checks the bet that is placed
         return humanWager.getCurrentBet();
