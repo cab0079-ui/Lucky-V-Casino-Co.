@@ -46,6 +46,9 @@ public class Blackjack {            //Basic card game logic for Blackjack
         gameOver = false;           //indicates the game has not ended
     }
     public boolean placeBet(int amount){                        //allows the user to place bets
+        if (humanWager.hasActiveBet()) {
+            return false;
+        }
         if (!gameOver && (!humanplayer.getCards().isEmpty()     //unless anyone has no cards
                 || !aiplayer.getCards().isEmpty() 
                 || !player.getCards().isEmpty())){
@@ -98,6 +101,8 @@ public class Blackjack {            //Basic card game logic for Blackjack
         
         if (Bust(humanplayer)){  //checks whether the user busted
         humanStayed = true;     //ends the user's turn & bust check
+        playAI();
+        checkGameOver();
         }                         
     
         checkGameOver();        //checks whether all players have finished
@@ -169,6 +174,7 @@ public class Blackjack {            //Basic card game logic for Blackjack
         }
         
         gameOver = true;        //marks the round as finished
+        settleBet();
         deck.shuffle();         //shuffles the deck after the round
     }
     
@@ -215,45 +221,48 @@ public class Blackjack {            //Basic card game logic for Blackjack
     public String Outcome(){                            //determines the winner
         int humanTotal = calculateHand(humanplayer);    //creates an integer total from the calculated user's hand
         int aiTotal = calculateHand(aiplayer);          //creates an integer total from the calculated ai's hand
-        int dealerTotal = calculateHand(player);         //creates an integer total form the calculated dealer's hand
-        
+        int dealerTotal = calculateHand(player);        //creates an integer total from the calculated dealer's hand
+
         String result = "Result:\n";                    //starts the result output
-        result += "Human: " + humanTotal + "\n";        //gives user's total
-        result += "AI: " + aiTotal + "\n";              //gives player 2's total
-        result += "Dealer: " + dealerTotal + "\n";      //gives dealer's total
-        
-        if (humanTotal > 21){                           //checks if the user busted
-            result += "Player 1 busted.\n";}            //outputs that result
-        else if (aiTotal > 21){                         //checks if player 2 busted
-            result += "Player 2 busted.\n";}            //outputs that result
-        else if (dealerTotal > 21){                     //checks if the dealer busted
-            result += "The Dealer busted.\n";           //outputs that result
+        result += "Human: " + humanTotal + "\n";         //gives user's total
+        result += "AI: " + aiTotal + "\n";               //gives player 2's total
+        result += "Dealer: " + dealerTotal + "\n";       //gives dealer's total
+
+        //checks the human player's outcome
+        if (humanTotal > 21){                            //checks if the user busted
+            result += "Player 1 busted. Dealer wins.\n";
         }
-        
-        if (humanTotal <= 21 && humanTotal > dealerTotal){          //checks if the user beat the dealer
-            result += "Player 1 beats the Dealer's hand!\n";        //outputs that
+        else if (dealerTotal > 21){                      //checks if the dealer busted
+            result += "Player 1 beats the Dealer's hand!\n";
         }
-        else if (humanTotal <= 21 && humanTotal < dealerTotal       //checks if the dealer beats the user
-                && dealerTotal <= 21){
-            result += "The Dealer beats Player 1's hand!\n";        //outputs that
+        else if (humanTotal > dealerTotal){              //checks if the user beat the dealer
+            result += "Player 1 beats the Dealer's hand!\n";
         }
-        else if (humanTotal <= 21 && humanTotal == dealerTotal){    //checks if the user and dealer tie
-            result += "Player 1 and the Dealer tie!\n";             //outputs that
+        else if (humanTotal < dealerTotal){              //checks if the dealer beat the user
+            result += "The Dealer beats Player 1's hand!\n";
         }
-        
-        if (aiTotal <= 21 && aiTotal > dealerTotal){                //checks if player 2 beats the dealer
-            result += "Player 2 beats the Dealer's hand!\n";        //outputs that 
+        else {                                           //handles a tie between the user and dealer
+            result += "Player 1 and the Dealer tie!\n";
         }
-        else if (aiTotal <= 21 && aiTotal < dealerTotal             //checks if the dealer beats player 2
-                && dealerTotal <= 21){                      
-            result += "The Dealer beats Player 2's hand!\n";        //outputs that
+
+        if (aiTotal > 21){                               //checks if player 2 busted
+            result += "Player 2 busted. Dealer wins.\n";
         }
-        else if (aiTotal <= 21 && aiTotal == dealerTotal){          //checks if the dealer and player 2 tie
-            result += "Player 2 & the Dealer tie!\n";               //outputs that
+        else if (dealerTotal > 21){                      //checks if the dealer busted
+            result += "Player 2 beats the Dealer's hand!\n";
         }
-        
-        result += "Remaining Credits: " + humanWager.getCredits() + "\n";
-        
-        return result;                                              //outputs the results of the winner's and/or loser's
+        else if (aiTotal > dealerTotal){                 //checks if player 2 beat the dealer
+            result += "Player 2 beats the Dealer's hand!\n";
+        }
+        else if (aiTotal < dealerTotal){                 //checks if the dealer beat player 2
+            result += "The Dealer beats Player 2's hand!\n";
+        }
+        else{                                            //handles a tie between player 2 and dealer
+            result += "Player 2 & the Dealer tie!\n";
+        }
+
+        result += "Remaining Credits: " + humanWager.getCredits() + "\n"; //outputs remaining credits
+
+        return result;                                   //outputs the results of the winner's and/or loser's
     }
 }   
