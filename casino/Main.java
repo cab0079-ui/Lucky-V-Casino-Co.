@@ -4,16 +4,15 @@
  */
 package casino;
 
+import casino.ui.CasinoWindow;
+
+import javax.swing.*;
+
 /**
  * @author Chase Bradley, Joseph Dial, Kaleb Hankerson
  */
 public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-
     public static void main(String[] args) {
-
+        SwingUtilities.invokeLater(CasinoWindow::new);
     }
 }

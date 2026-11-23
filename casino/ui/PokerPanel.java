@@ -1,9 +1,11 @@
-package casino.games.poker;
+package casino.ui;
 
 import casino.cards.Card;
 import casino.core.AIPlayer;
 import casino.core.HumanPlayer;
 import casino.core.Player;
+import casino.games.poker.FiveCardDraw;
+import casino.games.poker.HandRank;
 import casino.persistence.PlayerRepository;
 
 import javax.swing.BorderFactory;
