@@ -1,0 +1,346 @@
+
+package casino.games.blackjack;
+
+import casino.cards.Card;
+import casino.cards.Rank;
+import casino.cards.Suit;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+
+public class BlackjackPanel extends JPanel {
+
+    private static final Color FELT = new Color(0x0B, 0x5D, 0x2E);
+    private static final Color CARD_BACK = new Color(0x20, 0x45, 0x85);
+
+    private Blackjack game;
+    private Runnable onExit;
+
+    private JLabel creditsLabel;
+    private JLabel betLabel;
+    private JLabel messageLabel;
+
+    private JTextField betField;
+
+    private JButton dealButton;
+    private JButton hitButton;
+    private JButton stayButton;
+    private JButton backButton;
+
+    private JPanel dealerRow;
+    private JPanel aiRow;
+    private JPanel humanRow;
+
+    public BlackjackPanel(Runnable onExit) {
+
+        game = new Blackjack(1000);
+        this.onExit = onExit;
+
+        setLayout(new BorderLayout(10, 10));
+        setBackground(FELT);
+        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        // HEADER
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(FELT);
+
+        creditsLabel = new JLabel();
+        creditsLabel.setForeground(Color.WHITE);
+        creditsLabel.setFont(new Font("Arial", Font.BOLD, 18));
+
+        betLabel = new JLabel();
+        betLabel.setForeground(Color.WHITE);
+        betLabel.setFont(new Font("Arial", Font.BOLD, 18));
+
+        header.add(creditsLabel, BorderLayout.WEST);
+        header.add(betLabel, BorderLayout.EAST);
+
+        add(header, BorderLayout.NORTH);
+
+        // TABLE
+        JPanel tablePanel = new JPanel();
+        tablePanel.setLayout(new GridLayout(3, 1, 10, 10));
+        tablePanel.setBackground(FELT);
+
+        dealerRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        aiRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        humanRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
+        styleSeat(dealerRow, "DEALER");
+        styleSeat(aiRow, "AI PLAYER");
+        styleSeat(humanRow, "YOUR HAND");
+
+        tablePanel.add(dealerRow);
+        tablePanel.add(aiRow);
+        tablePanel.add(humanRow);
+
+        add(tablePanel, BorderLayout.CENTER);
+
+        // CONTROLS
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        controlPanel.setBackground(FELT);
+
+        betField = new JTextField(6);
+
+        dealButton = new JButton("Deal");
+        hitButton = new JButton("Hit");
+        stayButton = new JButton("Stay");
+        backButton = new JButton("Back");
+
+        messageLabel = new JLabel("Enter your bet and select Deal.");
+        messageLabel.setForeground(Color.WHITE);
+        messageLabel.setFont(new Font("Arial", Font.BOLD, 14));
+
+        controlPanel.add(new JLabel("Bet:"));
+        controlPanel.add(betField);
+        controlPanel.add(dealButton);
+        controlPanel.add(hitButton);
+        controlPanel.add(stayButton);
+        controlPanel.add(backButton);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBackground(FELT);
+
+        bottomPanel.add(messageLabel, BorderLayout.NORTH);
+        bottomPanel.add(controlPanel, BorderLayout.CENTER);
+
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        // BUTTON ACTIONS
+        dealButton.addActionListener(e -> deal());
+        hitButton.addActionListener(e -> hit());
+        stayButton.addActionListener(e -> stay());
+        backButton.addActionListener(e -> goBack());
+
+        updateHeader();
+        updateDisplay();
+    }
+
+    // DEAL CARDS
+    private void deal() {
+
+        try {
+            int amount = Integer.parseInt(betField.getText());
+
+            if (!game.placeBet(amount)) {
+                messageLabel.setText("Invalid bet or insufficient credits!");
+                return;
+            }
+
+            game.dealCards();
+
+            messageLabel.setText("Cards dealt. Choose Hit or Stay.");
+            updateDisplay();
+
+        } catch (NumberFormatException e) {
+            messageLabel.setText("Please enter a valid whole-number bet.");
+        }
+    }
+
+    // HIT
+    private void hit() {
+
+        game.Hit();
+
+        updateDisplay();
+
+        if (game.isGameOver()) {
+            messageLabel.setText("Round finished!");
+        }
+    }
+
+    // STAY
+    private void stay() {
+
+        game.Stay();
+
+        updateDisplay();
+
+        if (game.isGameOver()) {
+            messageLabel.setText("Round finished!");
+        }
+    }
+
+    // RETURN TO MENU
+    private void goBack() {
+
+        if (onExit != null) {
+            onExit.run();
+        } else {
+            Window window = SwingUtilities.getWindowAncestor(this);
+
+            if (window != null) {
+                window.dispose();
+            }
+        }
+    }
+
+    // UPDATE HEADER
+    private void updateHeader() {
+
+        creditsLabel.setText("Credits: " + game.getCredits());
+        betLabel.setText("Current Bet: " + game.currentBet());
+    }
+
+    // UPDATE CARDS AND BUTTONS
+    private void updateDisplay() {
+
+        boolean finished = game.isGameOver();
+
+        fillHand(dealerRow, game.getDealer(), finished);
+        fillHand(aiRow, game.getAIPlayer(), true);
+        fillHand(humanRow, game.getHumanPlayer(), true);
+
+        updateHeader();
+
+        hitButton.setEnabled(!finished && game.getHumanPlayer().getSize() > 0);
+        stayButton.setEnabled(!finished && game.getHumanPlayer().getSize() > 0);
+
+        dealButton.setEnabled(finished || game.getHumanPlayer().getSize() == 0);
+
+        if (finished) {
+            messageLabel.setText("<html>"
+                    + game.Outcome().replace("\n", "<br>")
+                    + "</html>");
+        }
+
+        revalidate();
+        repaint();
+    }
+
+    // STYLE PLAYER AREAS
+    private void styleSeat(JPanel panel, String title) {
+
+        panel.setBackground(FELT);
+
+        TitledBorder border = BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(Color.WHITE),
+                title
+        );
+
+        border.setTitleColor(Color.WHITE);
+        border.setTitleFont(new Font("Arial", Font.BOLD, 16));
+
+        panel.setBorder(border);
+    }
+
+    // DISPLAY CARDS IN PLAYER AREA
+    private void fillHand(JPanel panel, Hand hand, boolean revealAll) {
+
+        panel.removeAll();
+
+        for (int i = 0; i < hand.getSize(); i++) {
+
+            if (!revealAll && i == 1) {
+                panel.add(createCardBack());
+            } else {
+                panel.add(createCardFace(hand.getCard(i)));
+            }
+        }
+
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    // CREATE CARD FACE
+    private JLabel createCardFace(Card card) {
+
+        JLabel label = new JLabel(
+                "<html><center>"
+                + rankText(card.getRank())
+                + "<br>"
+                + suitText(card.getSuit())
+                + "</center></html>"
+        );
+
+        label.setOpaque(true);
+        label.setBackground(Color.WHITE);
+        label.setForeground(cardColor(card.getSuit()));
+
+        label.setFont(new Font("Arial", Font.BOLD, 22));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setPreferredSize(new Dimension(74, 104));
+
+        label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+        return label;
+    }
+
+    // CREATE CARD BACK
+    private JLabel createCardBack() {
+
+        JLabel label = new JLabel("BLACKJACK");
+
+        label.setOpaque(true);
+        label.setBackground(CARD_BACK);
+        label.setForeground(Color.WHITE);
+
+        label.setFont(new Font("Arial", Font.BOLD, 11));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setPreferredSize(new Dimension(74, 104));
+
+        label.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+
+        return label;
+    }
+
+    // CARD RANK TEXT
+    private String rankText(Rank rank) {
+
+        switch (rank.getValue()) {
+            case 1:
+                return "A";
+            case 11:
+                return "J";
+            case 12:
+                return "Q";
+            case 13:
+                return "K";
+            default:
+                return String.valueOf(rank.getValue());
+        }
+    }
+
+    // CARD SUIT TEXT
+    private String suitText(Suit suit) {
+
+        switch (suit) {
+            case SPADES:
+                return "\u2660";
+            case HEARTS:
+                return "\u2665";
+            case DIAMONDS:
+                return "\u2666";
+            case CLUBS:
+                return "\u2667";
+            default:
+                return "";
+        }
+    }
+
+    // CARD COLOR
+    private Color cardColor(Suit suit) {
+
+        if (suit == Suit.HEARTS || suit == Suit.DIAMONDS) {
+            return Color.RED;
+        }
+
+        return Color.BLACK;
+    }
+
+    // TEMPORARY GUI TEST LAUNCHER
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(() -> {
+
+            JFrame frame = new JFrame("Blackjack");
+
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setContentPane(new BlackjackPanel(null));
+            frame.setSize(900, 600);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
+    }
+}
